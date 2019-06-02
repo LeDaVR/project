@@ -76,5 +76,5 @@ glm::vec3 Element::getScale() {
 }
 
 std::string Element::getInfo() {
-	return info[0]+'\n'+info[1]+'\n'+info[2]+'\n'+info[3];
+	return info[1]+'\n'+info[2]+'\n'+info[3];
 }

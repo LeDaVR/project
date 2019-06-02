@@ -39,12 +39,21 @@ Element EditorData::getElement() {
 
 void EditorData::save(vector<Element> objects,std::string mapaname) {
 	ofstream o(mapaname);
-	for (int i = 0; i < objects.size(); i++) {
-		if (i != 0)
-			o << '\n';
-		o << objects[i].getInfo();
+	int cont = 0;
+	for (int i = 0; i < models.size(); i++){
+		for (int j = 0; j < objects.size(); j++){
+			if (models[i] == objects[j].getID())
+				cont++;
+		}
+		if (cont > 0) {
+			o << models[i] << " " << cont << '\n';
+			cont = 0;
+			for (int k = 0; k < objects.size(); k++) {
+				if (models[i] == objects[k].getID())
+					o << objects[k].getInfo() << '\n';
+			}
+		}
 	}
-		
 	o.close();
 }
 
