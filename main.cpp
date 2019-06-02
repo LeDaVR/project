@@ -12,8 +12,7 @@
 #include <learnopengl/editor.cpp>
 #include <learnopengl/camera.h>
 #include <learnopengl/camera.cpp>
-//#include <learnopengl/elements.h>
-//#include <learnopengl/elements.cpp>
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
@@ -22,6 +21,14 @@ const unsigned int SCR_HEIGHT = 600;
 
 int main()
 {
+	cout << "------------THIS IS A EDITOR DEMO--------------- " << endl;
+	cout << "------------ COMANDS: ---------------------------" << endl;
+	cout << "PRESS S FOR SAVE YOUR MAP " << endl;
+	cout << "PRESS + FOR CHANGE THE CURRENT MODEL " << endl;
+	cout << "-------- THE PROGRAM HAS INITIALIZED ------------" << endl;
+	cout << "PUT A FILE NAME: " << endl;
+	string name;
+	cin >> name;
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
@@ -56,10 +63,10 @@ int main()
     Camera camara(SCR_WIDTH,SCR_HEIGHT);
 
 	Shader modelshader("1.model_loading.vs", "1.model_loading.fs");
-	Model campesino("resources/objects/nanosuit/campesino.obj");
 
 	Shader ourShader("7.3.camera.vs", "7.3.camera.fs");
-    Editor editor;
+
+    Editor editor(name+".rohmap");
 	
     unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
@@ -89,23 +96,11 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		modelshader.use();
-        camara.camera_protection(&modelshader);
-        camara.camera_transformation(&modelshader);
-		glm::mat4 model2 = glm::mat4(1.0f);		
-		model2 = glm::translate(model2, glm::vec3(0.0f,0.0f,0.0f));
-		model2 = glm::rotate(model2,glm::radians(90.0f), glm::vec3(1, 0, 0));
-		//model2 = glm::scale(model2, glm::vec3(0.02f, 0.02f, 0.02f));
-		modelshader.setMat4("model", model2);
-		campesino.Draw(modelshader);
-
-
 		ourShader.use();
 		camara.camera_protection(&ourShader);
 		camara.camera_transformation(&ourShader);
 		glm::mat4 model = glm::mat4(1.0f);
 		ourShader.setMat4("model", model);
-		//model2 = glm::translate(model2, glm::vec3(0.0f, 0, 0.0f)); // translate it down so it's at the center of the scene
         glBindVertexArray(VAO); 
         glDrawElements(GL_LINE_STRIP,editor.getIndicesSize(), GL_UNSIGNED_INT,editor.getIndicesArray());
 		

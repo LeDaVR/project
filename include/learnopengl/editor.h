@@ -15,45 +15,46 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <learnopengl/elements.h>
-#include <learnopengl/elements.cpp>
+#include <learnopengl/element.h>
+#include <learnopengl/element.cpp>
 
 class EditorData {
-		ElementData data;
-		Model* model;
+		int currentindex;
+		Element currentelement;
+		vector<std::string> models;
 	public:
 		EditorData();
-		void viewmodels(GLFWwindow* window,  Camera* camara,Model *ourmodel);
-		void selectmodel(Model* ourmodel);
+		void changeModel();
+		Element getElement();
+
+		void save(vector<Element>,std::string);
 
 };
 
 class Editor{
 	private:
-
+		std::string mapaname;
 		EditorData data;
-		Arbol arbol;
 
-		glm::mat4 modelpos;
-		Model* currentmodel;
+		glm::mat4 modeltransform;
+		Element currentelement;
 		
-		int interfaz;
 		int dimension;
 		float cuadrante;
 
-		DinamicArray<float> vertices;
+		DinamicArray<float> vertices;         //cuadricula
 		DinamicArray<unsigned int> indices;
 
-		int index;
+		int index;					        //gestion de objetos
 		bool* memorystatus;
-		std::vector<Model> objects;
+		std::vector<Element> objects;
 		std::vector<int> memory;
 
 		void drawObjects(GLFWwindow*, Shader*, Camera*);
-		void addModel(float xpos,float ypos);
+		void addModel();
 		void deleteModel();
 	public:
-		Editor();
+		Editor(std::string mapaname);
 		
 		bool isinside(GLFWwindow* window,Camera* camara);
 		void use(GLFWwindow* window,Camera* camara,Shader *modelshader);	

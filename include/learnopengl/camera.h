@@ -32,6 +32,8 @@ class Camera{
 		double get3dposY(GLFWwindow* window);
 		double getWidth();
 		double getHeight();
+		float getDRX();
+		float getDRY();
 };
 
 #endif

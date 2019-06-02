@@ -94,3 +94,10 @@ double Camera::getWidth() {
 double Camera::getHeight() {
 	return HEIGHT;
 }
+
+float Camera::getDRX() {
+	return this->DRX;
+}
+float Camera::getDRY() {
+	return this->DRY;
+}

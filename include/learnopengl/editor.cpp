@@ -1,23 +1,55 @@
 #include "editor.h"
 
-EditorData::EditorData() {
-	//model = &arbol;
+EditorData::EditorData(){
+	std::string modelname="";
+	std::string archivo="";
+	ifstream source("models.txt");
+	getline(source, archivo,'\0');
+	source.close();
+	cout << archivo.size() << endl;
+	for (int i = 0; i<archivo.size()+1; i++) {
+		if(archivo[i]!='\n'&&archivo[i]!='\0')
+			modelname += archivo[i];
+		else {
+			models.push_back(modelname);
+			modelname = "";
+		}
+	}
+	cout << "MODELS " << endl;
+	for (int i = 0; i < models.size(); i++)
+		std::cout << models[i] << std::endl;
+	currentelement.setID(models[0]);
+	currentelement.model.setModel("resources/models/"+models[0]+".obj");
+	currentindex = 0;
 }
 
-void EditorData::viewmodels(GLFWwindow *window,Camera* camara,Model *ourmodel) {
-	double posx, posy;
-	glfwGetCursorPos(window, &posx, &posy);
-	//model = int(posy / 300 );
+void EditorData::changeModel() {
+	if (currentindex < models.size() - 1)
+		currentindex++;
+	else
+		currentindex = 0;
+	currentelement.setID(models[currentindex]);
+	currentelement.model.resetModel();
+	currentelement.model.setModel("resources/models/" + currentelement.getID() + ".obj");
 }
 
-void EditorData::selectmodel(Model *ourmodel) {
-	ourmodel = model;
+Element EditorData::getElement() {
+	return currentelement;
 }
 
+void EditorData::save(vector<Element> objects,std::string mapaname) {
+	ofstream o(mapaname);
+	for (int i = 0; i < objects.size(); i++) {
+		if (i != 0)
+			o << '\n';
+		o << objects[i].getInfo();
+	}
+		
+	o.close();
+}
 
-Editor::Editor(){
-	
-	interfaz = 0;
+Editor::Editor(std::string mapaname){
+	this->mapaname = mapaname;
 	dimension=40;
 	cuadrante=1.0f;
 	memorystatus = new bool[dimension * dimension];
@@ -45,7 +77,7 @@ Editor::Editor(){
 		indices.push_back(cont+dimension);
 		cont++;
 	}
-	currentmodel = arbol.getModel();
+	currentelement = data.getElement();
 }
 
 bool Editor::isinside(GLFWwindow* window,Camera* camara){
@@ -58,30 +90,33 @@ bool Editor::isinside(GLFWwindow* window,Camera* camara){
 }
 
 void Editor::drawObjects(GLFWwindow *window ,Shader *modelshader,Camera *camara) {
-	for (int i = 0; i < memory.size(); i++) {
-		int xpos, ypos;
-		xpos = memory[i] % dimension;
-		ypos = memory[i] / dimension +1;
+	for (int i = 0; i < objects.size(); i++) {
 		modelshader->use();
 		camara->camera_protection(modelshader);
 		camara->camera_transformation(modelshader);
-		modelpos = glm::mat4(1.0f);
-		modelpos = glm::translate(modelpos, glm::vec3(xpos+cuadrante/2.0f, ypos-cuadrante/2.0f, 0.0f));
-		modelpos = glm::rotate(modelpos, glm::radians(90.0f), glm::vec3(1, 0, 0));
-		modelshader->setMat4("model", modelpos);
-		objects[i].Draw(*modelshader);
+		modeltransform = glm::mat4(1.0f);
+		modeltransform = glm::translate(modeltransform,objects[i].getPosition());
+		modeltransform = glm::rotate(modeltransform, glm::radians(90.0f),objects[i].getRotate());
+		modelshader->setMat4("model", modeltransform);
+		objects[i].model.Draw(*modelshader);
 	}
-	
-	
-	//model2 = glm::scale(model2, glm::vec3(0.02f, 0.02f, 0.02f));
-
-
 }
 
-void Editor::addModel(float posx,float posy) {
+void Editor::addModel() {
 	memorystatus[this->index] = false;
 	memory.push_back(this->index);
-	objects.push_back(*currentmodel);
+	objects.push_back(currentelement);
+
+	int xpos, ypos;
+	xpos = index % dimension;
+	ypos = index / dimension + 1;
+	glm::vec3 position=glm::vec3(xpos + cuadrante / 2.0f,ypos- +cuadrante / 2.0f,0.0f);
+	glm::vec3 rotate=glm::vec3(1,0,0);
+
+	objects[objects.size() - 1].setID(currentelement.getID());
+	objects[objects.size() - 1].setPosition(position);
+	objects[objects.size() - 1].setRotation(rotate, 90.0f);
+	//cout << objects[objects.size() - 1].getInfo();
 }
 
 void Editor::deleteModel(){
@@ -96,9 +131,6 @@ void Editor::deleteModel(){
 }
 
 void Editor::use(GLFWwindow* window,Camera* camara,Shader *modelshader){
-	switch (interfaz)
-	{
-		case (0): {
 			drawObjects(window, modelshader, camara);
 			if (isinside(window,camara)){
 				int leftclick = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
@@ -110,9 +142,19 @@ void Editor::use(GLFWwindow* window,Camera* camara,Shader *modelshader){
 				cx = int(xpos / cuadrante) + (cuadrante / 2.0f);
 				cy = int(ypos / cuadrante) + 1 - (cuadrante / 2.0f);
 				index = int(xpos / cuadrante) + dimension * int(ypos / cuadrante);
+
+				modelshader->use();
+				camara->camera_protection(modelshader);
+				camara->camera_transformation(modelshader);
+				modeltransform = glm::mat4(1.0f);
+				modeltransform = glm::translate(modeltransform,glm::vec3(camara->get3dposX(window), camara->get3dposY(window),0.0f));
+				modeltransform = glm::rotate(modeltransform, glm::radians(90.0f),glm::vec3(1,0,0));
+				modelshader->setMat4("model", modeltransform);
+				currentelement.model.Draw(*modelshader);
+
 				if (leftclick == GLFW_PRESS) {
 					if (memorystatus[index]) {
-						addModel(cx, cy);
+						addModel();
 					}
 
 				}
@@ -122,23 +164,14 @@ void Editor::use(GLFWwindow* window,Camera* camara,Shader *modelshader){
 					}
 				}
 			}
-			if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-				interfaz = 1;
+			if (glfwGetKey(window, GLFW_KEY_KP_ADD) == GLFW_PRESS) {
+				data.changeModel();
+				this->currentelement = data.getElement();
 			}
-			break;
-		}
-		case (1): {
-			int leftclick = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-			if (leftclick == GLFW_PRESS) {
-				data.viewmodels(window,camara,currentmodel);
-				data.selectmodel(currentmodel);
-				interfaz = 0;
+
+			if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+				data.save(objects, mapaname);
 			}
-			break;
-		}
-		default:
-			break;
-	}
 }
 
 int Editor::getVerticesSize(){
