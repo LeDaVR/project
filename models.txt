@@ -1,2 +1,2 @@
-arbol
-campesino
+TREE
+FARMER

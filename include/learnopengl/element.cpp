@@ -25,7 +25,7 @@ void Element::refreshinfo() {
 	info.clear();
 	info.push_back(elementID);
 	info.push_back(std::to_string(position.x) + " " + std::to_string(position.y) + " " + std::to_string(position.z));
-	info.push_back(std::to_string(angle) + " " + std::to_string(rotate.x) + " " + std::to_string(rotate.y) + " " + std::to_string(rotate.z));
+	info.push_back(std::to_string(rotate.x*angle) + " " + std::to_string(rotate.y*angle) + " " + std::to_string(rotate.z*angle));
 	info.push_back(std::to_string(scale.x) + " " + std::to_string(scale.y) + " " + std::to_string(scale.z));
 }
 void Element::setModel() {
