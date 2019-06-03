@@ -105,6 +105,7 @@ void Editor::drawObjects(GLFWwindow *window ,Shader *modelshader,Camera *camara)
 		camara->camera_transformation(modelshader);
 		modeltransform = glm::mat4(1.0f);
 		modeltransform = glm::translate(modeltransform,objects[i].getPosition());
+		modeltransform = glm::scale(modeltransform, objects[i].getScale());
 		modeltransform = glm::rotate(modeltransform, glm::radians(90.0f),objects[i].getRotate());
 		modelshader->setMat4("model", modeltransform);
 		objects[i].model.Draw(*modelshader);
@@ -120,11 +121,13 @@ void Editor::addModel() {
 	xpos = index % dimension;
 	ypos = index / dimension + 1;
 	glm::vec3 position=glm::vec3(xpos + cuadrante / 2.0f,ypos- +cuadrante / 2.0f,0.0f);
-	glm::vec3 rotate=glm::vec3(1,0,0);
+	glm::vec3 rotate = glm::vec3(1, 0, 0);
+	glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
 	objects[objects.size() - 1].setID(currentelement.getID());
 	objects[objects.size() - 1].setPosition(position);
 	objects[objects.size() - 1].setRotation(rotate, 90.0f);
+	objects[objects.size() - 1].setScale(scale);
 	//cout << objects[objects.size() - 1].getInfo();
 }
 

@@ -5,13 +5,13 @@ Camera::Camera(const unsigned int _WIDTH,const unsigned int _HEIGHT){
 	this->HEIGHT=float(_HEIGHT);
 	xoverflow=0.0f;
 	yoverflow=0.0f;
-	altura=10.0f/*0.5*sqrt(3)*/;
+	altura=10.0f;
 	fov=90.0f;
 	RA=WIDTH/HEIGHT;
-	DRY=2*altura*sin(glm::radians(fov));
+	DRY=2*altura*1;
 	DRX=DRY*RA;
 	cameraPos= glm::vec3(0.0f,0.0f,altura);
-	cameraDir= glm::vec3(0.0f,0.0f,-altura);
+	cameraDir= glm::vec3(0.0f,0.0f,-1.0f);
 	cameraUp = glm::vec3(0.0f,1.0f,0.0f);
 }
 

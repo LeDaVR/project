@@ -24,8 +24,8 @@ Element::Element(std::string id, glm::vec3 position, glm::vec3 rotate,float angl
 void Element::refreshinfo() {
 	info.clear();
 	info.push_back(elementID);
-	info.push_back(std::to_string(position.x) + " " + std::to_string(position.y) + " " + std::to_string(position.z));
-	info.push_back(std::to_string(rotate.x*angle) + " " + std::to_string(rotate.y*angle) + " " + std::to_string(rotate.z*angle));
+	info.push_back(std::to_string(position.x) + " " + std::to_string(position.z) + " " + std::to_string(position.y));
+	info.push_back(std::to_string(rotate.x*angle-90.0f) + " " + std::to_string(rotate.y*angle) + " " + std::to_string(rotate.z*angle));
 	info.push_back(std::to_string(scale.x) + " " + std::to_string(scale.y) + " " + std::to_string(scale.z));
 }
 void Element::setModel() {
