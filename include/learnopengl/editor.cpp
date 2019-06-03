@@ -173,7 +173,7 @@ void Editor::use(GLFWwindow* window,Camera* camara,Shader *modelshader){
 					}
 				}
 			}
-			if (glfwGetKey(window, GLFW_KEY_KP_ADD) == GLFW_PRESS) {
+			if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
 				data.changeModel();
 				this->currentelement = data.getElement();
 			}

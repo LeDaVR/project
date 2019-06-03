@@ -24,7 +24,7 @@ int main()
 	cout << "------------THIS IS A EDITOR DEMO--------------- " << endl;
 	cout << "------------ COMANDS: ---------------------------" << endl;
 	cout << "PRESS S FOR SAVE YOUR MAP " << endl;
-	cout << "PRESS + FOR CHANGE THE CURRENT MODEL " << endl;
+	cout << "PRESS X FOR CHANGE THE CURRENT MODEL " << endl;
 	cout << "-------- THE PROGRAM HAS INITIALIZED ------------" << endl;
 	cout << "PUT A FILE NAME: " << endl;
 	string name;
