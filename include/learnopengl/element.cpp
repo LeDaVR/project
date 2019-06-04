@@ -5,12 +5,12 @@ Element::Element() {
 	position = glm::vec3(0.0f);
 	rotate = glm::vec3(0.0f);
 	scale = glm::vec3(1.0f);
-	angle = 0.0f;
+	angle = glm::vec3(0.0f);
 	refreshinfo();
 }
 
 
-Element::Element(std::string id, glm::vec3 position, glm::vec3 rotate,float angle, glm::vec3 scale){
+Element::Element(std::string id, glm::vec3 position, glm::vec3 rotate,glm::vec3 angle, glm::vec3 scale){
 	this->elementID = id;
 	this->position = position;
 	this->rotate = rotate;
@@ -18,14 +18,14 @@ Element::Element(std::string id, glm::vec3 position, glm::vec3 rotate,float angl
 	this->angle = angle;
 
 	refreshinfo();
-	setModel();
+	//setModel();
 }
 
 void Element::refreshinfo() {
 	info.clear();
 	info.push_back(elementID);
-	info.push_back(std::to_string(position.x) + " " + std::to_string(position.z) + " " + std::to_string(position.y));
-	info.push_back(std::to_string(rotate.x*angle-90.0f) + " " + std::to_string(rotate.y*angle) + " " + std::to_string(rotate.z*angle));
+	info.push_back(std::to_string(position.x) + " " + std::to_string(position.y) + " " + std::to_string(position.z));
+	info.push_back(std::to_string(rotate.x*angle.x) + " " + std::to_string(rotate.y*angle.y) + " " + std::to_string(rotate.z*angle.z));
 	info.push_back(std::to_string(scale.x) + " " + std::to_string(scale.y) + " " + std::to_string(scale.z));
 }
 void Element::setModel() {
@@ -43,7 +43,7 @@ void Element::setPosition(glm::vec3 position) {
 	this->position = position;
 	refreshinfo();
 }
-void Element::setRotation(glm::vec3 rotation, float angle) {
+void Element::setRotation(glm::vec3 rotation, glm::vec3 angle) {
 	this->angle = angle;
 	this->rotate = rotation;
 	refreshinfo();
@@ -53,7 +53,7 @@ void Element::setScale(glm::vec3 scale) {
 	refreshinfo();
 }
 
-void Element::setData(std::string id, glm::vec3 position, glm::vec3 rotate, float angle, glm::vec3 scale) {
+void Element::setData(std::string id, glm::vec3 position, glm::vec3 rotate, glm::vec3 angle, glm::vec3 scale) {
 	this->elementID;
 	setPosition(position);
 	setRotation(rotate, angle);

@@ -10,9 +10,9 @@ Camera::Camera(const unsigned int _WIDTH,const unsigned int _HEIGHT){
 	RA=WIDTH/HEIGHT;
 	DRY=2*altura*1;
 	DRX=DRY*RA;
-	cameraPos= glm::vec3(0.0f,0.0f,altura);
-	cameraDir= glm::vec3(0.0f,0.0f,-1.0f);
-	cameraUp = glm::vec3(0.0f,1.0f,0.0f);
+	cameraPos= glm::vec3(0.0f,altura,0.0f);
+	cameraDir= glm::vec3(0.0f,-1.0f,0.0f);
+	cameraUp = glm::vec3(0.0f,0.0f,-1.0f);
 }
 
 void Camera::camera_mouse_callback(GLFWwindow *window,float deltaTime){
@@ -35,7 +35,7 @@ void Camera::camera_mouse_callback(GLFWwindow *window,float deltaTime){
 	
 	if(mousePositionx<=1){
 		if(mousePositionx<0){
-			glfwSetCursorPos(window,0,mousePositiony);
+			glfwSetCursorPos(window,0.0f,mousePositiony);
 		}
 		cameraPos.x-=cameraSpeed;
 		this->xoverflow-=cameraSpeed;
@@ -45,16 +45,16 @@ void Camera::camera_mouse_callback(GLFWwindow *window,float deltaTime){
 		if(mousePositiony<0){
 			glfwSetCursorPos(window,mousePositionx,0);
 		}
-		cameraPos.y+=cameraSpeed;
-		this->yoverflow+=cameraSpeed;
+		cameraPos.z-=cameraSpeed;
+		this->yoverflow-=cameraSpeed;
 	}
 	
 	if(mousePositiony>=HEIGHT-1.0){
 		if(mousePositiony>HEIGHT){
 			glfwSetCursorPos(window,mousePositionx,HEIGHT);
 		}
-		cameraPos.y-=cameraSpeed;
-		this->yoverflow-=cameraSpeed;
+		cameraPos.z+=cameraSpeed;
+		this->yoverflow+=cameraSpeed;
 	}
 }
 void Camera::camera_protection(Shader *ourShader){
@@ -86,7 +86,7 @@ double Camera::get3dposX(GLFWwindow* window){
 double Camera::get3dposY(GLFWwindow* window){
 	double xpos,ypos;
 	glfwGetCursorPos(window,&xpos,&ypos);
-	return -(DRY*ypos/HEIGHT)+(DRY/2)+yoverflow;
+	return +(DRY*ypos/HEIGHT)-(DRY/2)+yoverflow;
 }
 double Camera::getWidth() {
 	return WIDTH;

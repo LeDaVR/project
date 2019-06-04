@@ -68,8 +68,8 @@ Editor::Editor(std::string mapaname){
 	for(int i=0;i<=dimension;i++){
 		for(int j=0;j<=dimension;j++){
 			vertices.push_back(float(j)*cuadrante);
-			vertices.push_back(float(i)*cuadrante);
 			vertices.push_back(0.0f);
+			vertices.push_back(-float(i) * cuadrante);
 		}
 	}
 	
@@ -93,7 +93,7 @@ bool Editor::isinside(GLFWwindow* window,Camera* camara){
 	double xpos,ypos;
 	xpos=camara->get3dposX(window);
 	ypos=camara->get3dposY(window);
-	if(xpos>=0&&xpos<=dimension*cuadrante&&ypos>=0&&ypos<=dimension*cuadrante)
+	if(xpos>=0&&xpos<=dimension*cuadrante&&ypos<=0&&ypos>=-dimension*cuadrante)
 		return true;
 	return false;
 }
@@ -106,7 +106,7 @@ void Editor::drawObjects(GLFWwindow *window ,Shader *modelshader,Camera *camara)
 		modeltransform = glm::mat4(1.0f);
 		modeltransform = glm::translate(modeltransform,objects[i].getPosition());
 		modeltransform = glm::scale(modeltransform, objects[i].getScale());
-		modeltransform = glm::rotate(modeltransform, glm::radians(90.0f),objects[i].getRotate());
+		//modeltransform = glm::rotate(modeltransform, glm::radians(90.0f),objects[i].getRotate());
 		modelshader->setMat4("model", modeltransform);
 		objects[i].model.Draw(*modelshader);
 	}
@@ -120,15 +120,16 @@ void Editor::addModel() {
 	int xpos, ypos;
 	xpos = index % dimension;
 	ypos = index / dimension + 1;
-	glm::vec3 position=glm::vec3(xpos + cuadrante / 2.0f,ypos- +cuadrante / 2.0f,0.0f);
-	glm::vec3 rotate = glm::vec3(1, 0, 0);
+	glm::vec3 position=glm::vec3(xpos + cuadrante / 2.0f,0.0f,-ypos +cuadrante / 2.0f);
+	glm::vec3 rotate = glm::vec3(0, 0, 0);
+	glm::vec3 angle = glm::vec3(0, 0, 0);
 	glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
 	objects[objects.size() - 1].setID(currentelement.getID());
 	objects[objects.size() - 1].setPosition(position);
-	objects[objects.size() - 1].setRotation(rotate, 90.0f);
+	objects[objects.size() - 1].setRotation(rotate,angle);
 	objects[objects.size() - 1].setScale(scale);
-	//cout << objects[objects.size() - 1].getInfo();
+	cout << objects[objects.size() - 1].getInfo(); 
 }
 
 void Editor::deleteModel(){
@@ -153,14 +154,14 @@ void Editor::use(GLFWwindow* window,Camera* camara,Shader *modelshader){
 				float cx, cy;
 				cx = int(xpos / cuadrante) + (cuadrante / 2.0f);
 				cy = int(ypos / cuadrante) + 1 - (cuadrante / 2.0f);
-				index = int(xpos / cuadrante) + dimension * int(ypos / cuadrante);
+				index = int(xpos / cuadrante) + dimension * int(-ypos / cuadrante);
 
 				modelshader->use();
 				camara->camera_protection(modelshader);
 				camara->camera_transformation(modelshader);
 				modeltransform = glm::mat4(1.0f);
-				modeltransform = glm::translate(modeltransform,glm::vec3(camara->get3dposX(window), camara->get3dposY(window),0.0f));
-				modeltransform = glm::rotate(modeltransform, glm::radians(90.0f),glm::vec3(1,0,0));
+				modeltransform = glm::translate(modeltransform,glm::vec3(camara->get3dposX(window),0.0f ,camara->get3dposY(window)));
+				//modeltransform = glm::rotate(modeltransform, glm::radians(90.0f),glm::vec3(1,0,0));
 				modelshader->setMat4("model", modeltransform);
 				currentelement.model.Draw(*modelshader);
 

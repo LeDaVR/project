@@ -12,7 +12,7 @@ class Element{
 		// position of model
 		glm::vec3 position;
 		glm::vec3 rotate;
-		float angle;
+		glm::vec3 angle;
 		glm::vec3 scale;
 
 		//info
@@ -25,13 +25,13 @@ class Element{
 		Model model;
 
 		Element();
-		Element(std::string, glm::vec3, glm::vec3,float angle, glm::vec3 );
+		Element(std::string, glm::vec3, glm::vec3,glm::vec3 angle, glm::vec3 );
 
 		void setID(std::string ID);
 		void setPosition(glm::vec3 position);
-		void setRotation(glm::vec3 rotation, float angle);
+		void setRotation(glm::vec3 rotation, glm::vec3 angle);
 		void setScale(glm::vec3 scale);
-		void setData(std::string, glm::vec3 , glm::vec3 , float , glm::vec3 );
+		void setData(std::string, glm::vec3 , glm::vec3 , glm::vec3 , glm::vec3 );
 
 		std::string getID();
 		std::string getInfo();
