@@ -54,6 +54,7 @@ void EditorData::save(vector<Element> objects,std::string mapaname) {
 			}
 		}
 	}
+	o << -1;
 	o.close();
 }
 
