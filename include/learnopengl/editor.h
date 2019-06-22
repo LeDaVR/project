@@ -42,8 +42,8 @@ class Editor{
 		int dimension;
 		float cuadrante;
 
-		DinamicArray<float> vertices;         //cuadricula
-		DinamicArray<unsigned int> indices;
+		std::vector<float> vertices;         //cuadricula
+		std::vector<unsigned int> indices;
 
 		int index;					        //gestion de objetos
 		bool* memorystatus;

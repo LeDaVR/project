@@ -60,7 +60,7 @@ void EditorData::save(vector<Element> objects,std::string mapaname) {
 
 Editor::Editor(std::string mapaname){
 	this->mapaname = mapaname;
-	dimension=40;
+	dimension=80;
 	cuadrante=1.0f;
 	memorystatus = new bool[dimension * dimension];
 	for (int i = 0; i < dimension * dimension; i++) {
@@ -189,18 +189,18 @@ void Editor::use(GLFWwindow* window,Camera* camara,Shader *modelshader){
 }
 
 int Editor::getVerticesSize(){
-	return vertices.getSize();
+	return vertices.size();
 }
 
 int Editor::getIndicesSize(){
-	return indices.getSize();
+	return indices.size();
 }
 
 float* Editor::getVerticesArray(){
-	return vertices.arr;
+	return &vertices[0];
 }
 unsigned int* Editor::getIndicesArray(){
-	return indices.arr;
+	return &indices[0];
 }
 
 Editor::~Editor(){
