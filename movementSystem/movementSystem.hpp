@@ -1,34 +1,36 @@
 #ifndef ECS_MOVEMENT_SYSTEM_H
 #define ECS_MOVEMENT_SYSTEM_H
 
-
 #include "ecs/entities/entityManager.hpp"
 #include "ecs/systems/unit/unitSystem.hpp"
 
-
-
-class MovementSystem{
+class MovementSystem
+{
+	
 public:
     static void init();
     static void update(float deltaTime);
     static void destroy();
 
-    static bool between(float,float,float);
-    static void checkColisions(Unit* unit,Unit* unit2,bool& up,bool& down,bool& left,bool& right,float deltaTime);
-    static void checkObstacles(Unit* unit,glm::vec3& objetive,bool& up,bool& down,bool& left,bool& right,float deltaTime);
+    static void move(Unit* unit, float deltaTime);
+    static void moveTowards(Unit* unit);
+    static void moveRight(Unit* unit, float deltaTime);
+    static void moveLeft(Unit* unit, float deltaTime);
+    static void moveUp(Unit* unite, float deltaTime);
+    static void moveDown(Unit* unit, float deltaTime);
 
+	static bool between(float val, float left, float right);
+	static void checkColisions(Unit* unit01, Unit* unit02, float deltaTime);
+	static void checkObstacles(Unit* unit, float deltaTime);
 
-    static void move(Unit* unit,float deltaTime);
-    static void moveDirection(Unit* unit,glm::vec3 objetive,bool& up,bool& down,bool& left,bool& right);
-    static void moveRight(Unit*,glm::vec3 objetive,float deltaTime);
-    static void moveLeft(Unit*,glm::vec3 objetive,float deltaTime);
-    static void moveUp(Unit*,glm::vec3 objetive,float deltaTime);
-    static void moveDown(Unit*,glm::vec3 objetive,float deltaTime);
-    static void setExtremes(Unit*,float&,float&,float&,float&);
+    static float getXdis(Unit* unit);
+    static float getYdis(Unit* unit);
+    static float getDistance(Unit* unit);
+	static void setExtremes(Unit* unit, float& up, float& down, float& left, float& right);
 
-    static float getXdis(Unit*,glm::vec3 objetive);
-    static float getYdis(Unit*,glm::vec3 objetive);
-    static float getDistance(Unit*,glm::vec3 objetive);
+private:
+	static bool up, down, left, right;
+    explicit MovementSystem() {}
 };
 
-#endif
+#endif // ECS_MOVEMENT_SYSTEM_H
